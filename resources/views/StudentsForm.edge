@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <title>Student Details</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 50px;
+    }
+
+    .container {
+      width: 600px;
+      margin: auto;
+      border: 2px solid #000;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .value {
+      border-bottom: 1px solid #000;
+      padding: 8px 5px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Student Details</h1>
+
+    <div class="field">
+      <span class="label">Name:</span>
+      <div class="value">
+        {{ name }}
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="label">Register Number:</span>
+      <div class="value">
+        {{ registerNumber }}
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="label">Course and Branch:</span>
+      <div class="value">
+        {{ course }}
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="label">Semester:</span>
+      <div class="value">
+        {{ semester }}
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
