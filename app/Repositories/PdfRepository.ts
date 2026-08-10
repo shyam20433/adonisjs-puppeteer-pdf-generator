@@ -8,34 +8,53 @@ type StudentForm = {
   course: string
   semester: number
 }
+
 export default class PdfRepository {
 
+  public async generatePdf(
+    payload: StudentForm
+  ): Promise<Buffer> {
 
-  public async generatePdf(payload: StudentForm){
     const html = await View.render('StudentsForm', {
       name: payload.name,
       registerNumber: payload.registerNumber,
       course: payload.course,
       semester: payload.semester,
     })
-    const browser = await puppeteer.launch({
-      headless: true,
-    })
+
+    const browser = await puppeteer.launch()
+
     try {
       const page = await browser.newPage()
+
       await page.setContent(html)
+
       const pdf = await page.pdf({
         format: 'A4',
         printBackground: true,
       })
-      console.log(Buffer.from(pdf))
+
       return Buffer.from(pdf)
+
     } finally {
       await browser.close()
     }
   }
 
-   public async checkFile(
+
+  public async savePdf(
+    filePath: string,
+    pdf: Buffer
+  ): Promise<void> {
+
+    await fs.writeFile(
+      filePath,
+      pdf as any
+    )
+  }
+
+
+  public async checkFile(
     filePath: string
   ): Promise<void> {
 
@@ -44,5 +63,5 @@ export default class PdfRepository {
     } catch {
       throw new Error('File name not found')
     }
-}
+  }
 }
