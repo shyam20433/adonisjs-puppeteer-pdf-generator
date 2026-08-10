@@ -1,81 +1,388 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
 
   <title>Student Details</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      padding: 50px;
+      margin: 0;
+      padding: 45px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #eef2ff;
+      color: #1f2937;
     }
 
-    .container {
-      width: 600px;
+    .card {
+      width: 100%;
+      max-width: 760px;
       margin: auto;
-      border: 2px solid #000;
-      padding: 30px;
+      background: #ffffff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.14);
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
+    /* HEADER */
+
+    .header {
+      padding: 35px 42px;
+      background: linear-gradient(
+        135deg,
+        #4338ca,
+        #6366f1,
+        #7c3aed
+      );
+
+      color: white;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .header-gif {
+      width: 95px;
+      height: 95px;
+      object-fit: contain;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 8px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 32px;
+      letter-spacing: 0.5px;
+    }
+
+    .header p {
+      margin: 8px 0 0;
+      font-size: 14px;
+      opacity: 0.88;
+    }
+
+    /* CONTENT */
+
+    .content {
+      padding: 38px 42px;
+    }
+
+    .section-title {
+      margin-bottom: 22px;
+
+      font-size: 12px;
+      font-weight: bold;
+
+      color: #6b7280;
+
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
     }
 
     .field {
-      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+
+      padding: 19px 0;
+
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .field:last-child {
+      border-bottom: none;
+    }
+
+    .field-gif {
+      width: 62px;
+      height: 62px;
+
+      object-fit: contain;
+
+      border-radius: 16px;
+
+      background: #f3f4ff;
+
+      padding: 7px;
+
+      margin-right: 20px;
+    }
+
+    .details {
+      flex: 1;
     }
 
     .label {
-      font-weight: bold;
       display: block;
-      margin-bottom: 5px;
+
+      margin-bottom: 6px;
+
+      font-size: 11px;
+
+      color: #9ca3af;
+
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .value {
-      border-bottom: 1px solid #000;
-      padding: 8px 5px;
       font-size: 18px;
+      font-weight: 600;
+
+      color: #111827;
     }
+
+    /* REGISTER NUMBER */
+
+    .register-badge {
+      display: inline-block;
+
+      padding: 7px 13px;
+
+      border-radius: 8px;
+
+      background: #eef2ff;
+
+      color: #4f46e5;
+
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    /* SEMESTER */
+
+    .semester-badge {
+      display: inline-block;
+
+      padding: 8px 16px;
+
+      border-radius: 20px;
+
+      background: #ecfdf5;
+
+      color: #059669;
+
+      font-size: 14px;
+
+      font-weight: bold;
+    }
+
+    /* FOOTER */
+
+    .footer {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 20px 42px;
+
+      background: #f9fafb;
+
+      border-top: 1px solid #e5e7eb;
+
+      color: #9ca3af;
+
+      font-size: 11px;
+    }
+
+    .verified {
+      padding: 7px 14px;
+
+      border-radius: 20px;
+
+      background: #ecfdf5;
+
+      color: #059669;
+
+      font-weight: bold;
+    }
+
   </style>
 </head>
 
+
 <body>
 
-  <div class="container">
+  <div class="card">
 
-    <h1>Student Details</h1>
 
-    <div class="field">
-      <span class="label">Name:</span>
-      <div class="value">
-        {{ name }}
+    <!-- HEADER -->
+
+    <div class="header">
+
+      <div class="header-content">
+
+        <!-- Graduation GIF -->
+
+        <img
+          class="header-gif"
+          src="https://cdnl.iconscout.com/lottie/premium/thumb/nino-completo-la-graduacion-animation-gif-download-8772809.gif"
+          alt="Graduation"
+        >
+
+        <div>
+
+          <h1>
+            Student Details
+          </h1>
+
+          <p>
+            Student Registration & Academic Information
+          </p>
+
+        </div>
+
       </div>
+
     </div>
 
-    <div class="field">
-      <span class="label">Register Number:</span>
-      <div class="value">
-        {{ registerNumber }}
+
+    <!-- STUDENT DETAILS -->
+
+    <div class="content">
+
+      <div class="section-title">
+        Personal & Academic Information
       </div>
+
+
+      <!-- NAME -->
+
+      <div class="field">
+
+        <!-- Profile GIF -->
+
+        <img
+          class="field-gif"
+          src="https://cdnl.iconscout.com/lottie/premium/thumb/man-profile-animation-gif-download-4107444.gif"
+          alt="Student Profile"
+        >
+
+        <div class="details">
+
+          <span class="label">
+            Name
+          </span>
+
+          <div class="value">
+            {{ name }}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- REGISTER NUMBER -->
+
+      <div class="field">
+
+        <!-- ID Card GIF -->
+
+        <img
+          class="field-gif"
+          src="https://assets-v2.lottiefiles.com/a/44d13626-4331-11ef-bb89-93bd25b33adb/4Z5SgL3Nut.gif"
+          alt="ID Card"
+        >
+
+        <div class="details">
+
+          <span class="label">
+            Register Number
+          </span>
+
+          <div class="register-badge">
+            {{ registerNumber }}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- COURSE -->
+
+      <div class="field">
+
+        <!-- Book GIF -->
+
+        <img
+          class="field-gif"
+          src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDY5d2kxcDRncTJocmdreGMxcGd4NHc4amhmbmQ1aDAwaGx2b2F0diZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/OY9ti8xLQJxvEGOKWr/giphy.gif"
+          alt="Books"
+        >
+
+        <div class="details">
+
+          <span class="label">
+            Course & Branch
+          </span>
+
+          <div class="value">
+            {{ course }}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SEMESTER -->
+
+      <div class="field">
+
+        <!-- Education / Graduation GIF -->
+
+        <img
+          class="field-gif"
+          src="https://cdnl.iconscout.com/lottie/premium/thumb/nino-completo-la-graduacion-animation-gif-download-8772809.gif"
+          alt="Academic Semester"
+        >
+
+        <div class="details">
+
+          <span class="label">
+            Semester
+          </span>
+
+          <div class="semester-badge">
+            Semester {{ semester }}
+          </div>
+
+        </div>
+
+      </div>
+
+
     </div>
 
-    <div class="field">
-      <span class="label">Course and Branch:</span>
-      <div class="value">
-        {{ course }}
-      </div>
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+      <span>
+        Student Registration System
+      </span>
+
+      <span class="verified">
+        ✓ VERIFIED
+      </span>
+
     </div>
 
-    <div class="field">
-      <span class="label">Semester:</span>
-      <div class="value">
-        {{ semester }}
-      </div>
-    </div>
 
   </div>
 
 </body>
+
 </html>

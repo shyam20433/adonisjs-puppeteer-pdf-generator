@@ -8,13 +8,16 @@ type StudentForm = {name: string
 }
 export default class PdfRepository {
   public async generatePdf(payload: StudentForm){
+
     const html = await View.render('StudentsForm', {
       name: payload.name,
       registerNumber: payload.registerNumber,
       course: payload.course,
       semester: payload.semester,
     })
+
     const browser = await puppeteer.launch()
+    
     try {
       const page = await browser.newPage()
       await page.setContent(html)
