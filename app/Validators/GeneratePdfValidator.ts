@@ -20,17 +20,14 @@ export default class GeneratePdfValidator {
       ]
     ),
 
-    course: schema.string(
-      { trim: true },
-      [
-        rules.required(),
-        rules.minLength(2),
-        rules.maxLength(100),
-      ]
-    ),
-
+    course: schema.enum([
+      'M.Sc Data Science',
+      'M.Sc Computer Science',
+      'MCA',
+    ] as const),
     semester: schema.number([
       rules.required(),
+      rules.range(1, 10),
     ]),
   })
 

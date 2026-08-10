@@ -14,7 +14,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
     return ctx.response.status(statusCode).send({
       status: false,
       message: 'PDF can\'t be generated',
-      error: error.message || 'Unknown error',
+      error: error.messages || error.message,
     })
   }
 
