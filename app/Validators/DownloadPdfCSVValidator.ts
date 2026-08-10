@@ -1,6 +1,6 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
-export default class DownloadPdfValidator {
+export default class DownloadPdfCSVValidator {
   public schema = schema.create({
     filename: schema.string(
       { trim: true },
@@ -8,7 +8,7 @@ export default class DownloadPdfValidator {
         rules.required(),
         rules.minLength(1),
         rules.maxLength(255),
-        rules.regex(/^[a-zA-Z0-9_-]+\.pdf$/),
+        rules.regex(/^[a-zA-Z0-9_-]+\.(pdf|csv)$/),
       ]
     ),
   })
