@@ -29,6 +29,10 @@ export default class GeneratePdfValidator {
       rules.required(),
       rules.range(1, 10),
     ]),
+    profileImage: schema.string([
+      rules.required(),
+      rules.url(),
+    ])
   })
 
   public messages = {

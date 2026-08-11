@@ -8,6 +8,7 @@ type StudentForm = {
   registerNumber: string
   course: string
   semester: number
+  profileImage: string
 }
 
 export default class PdfRepository {
@@ -21,6 +22,7 @@ export default class PdfRepository {
       registerNumber: payload.registerNumber,
       course: payload.course,
       semester: payload.semester,
+      profileImage: payload.profileImage
     })
 
     const browser = await puppeteer.launch()
@@ -38,12 +40,10 @@ export default class PdfRepository {
       })
 
       return Buffer.from(pdf)
-
     } finally {
       await browser.close()
     }
   }
-
 
   public async fileExists(
     filePath: string
@@ -57,18 +57,6 @@ export default class PdfRepository {
     }
   }
 
-  public async savePdf(
-    filePath: string,
-    pdf: Buffer
-  ): Promise<void> {
-
-    await fs.writeFile(
-      filePath,
-      pdf as any
-    )
-  }
-
-
   public async checkFile(
     filePath: string
   ): Promise<void> {
@@ -79,78 +67,93 @@ export default class PdfRepository {
       throw new Error('File name not found')
     }
   }
+
   public async saveStudentToCsv(
-  filePath: string,
-  form: StudentForm
-): Promise<void> {
+    filePath: string,
+    form: StudentForm
+  ): Promise<void> {
 
-  const exists = await this.fileExists(filePath)
+    const exists =
+      await this.fileExists(filePath)
 
-  if (!exists) {
-    await fs.writeFile(
+    if (!exists) {
+      await fs.writeFile(
+        filePath,
+        'Name,RegisterNumber,Course,Semester,profileImage\n'
+      )
+    }
+
+    const row =
+      `"${form.name}","${form.registerNumber}","${form.course}","${form.semester},"${form.profileImage}"\n`
+
+    await fs.appendFile(
       filePath,
-      'Name,RegisterNumber,Course,Semester\n'
+      row
     )
   }
 
-  const row =`"${form.name}","${form.registerNumber}","${form.course}","${form.semester}"\n`
-
-  await fs.appendFile(
-    filePath,
-    row
-  )
-}
-
+  private excelWriteQueue: Promise<void> = Promise.resolve()
 
   public async saveStudentToExcel(
     filePath: string,
     form: StudentForm
   ): Promise<void> {
 
-    const workbook = new ExcelJS.Workbook()
+    this.excelWriteQueue = this.excelWriteQueue
+      .catch(() => { })
+      .then(async () => {
+        const workbook = new ExcelJS.Workbook()
+        const exists = await this.fileExists(filePath)
 
-    const exists = await this.fileExists(filePath)
+        if (exists) {
+          await workbook.xlsx.readFile(filePath)
+        }
 
-    if (exists) {
-      await workbook.xlsx.readFile(filePath)
-    }
+        let worksheet = workbook.getWorksheet('Students')
 
-    let worksheet = workbook.getWorksheet('Students')
+        if (!worksheet) {
+          worksheet = workbook.addWorksheet('Students')
+        }
 
-    if (!worksheet) {
-      worksheet = workbook.addWorksheet('Students')
+        worksheet.columns = [
+          {
+            header: 'Name',
+            key: 'name',
+            width: 25,
+          },
+          {
+            header: 'Register Number',
+            key: 'registerNumber',
+            width: 20,
+          },
+          {
+            header: 'Course',
+            key: 'course',
+            width: 30,
+          },
+          {
+            header: 'Semester',
+            key: 'semester',
+            width: 15,
+          },
+          {
+            header: 'Profile Image',
+            key: 'profileImage',
+            width: 50,
+          }
+        ]
 
-      worksheet.columns = [
-        {
-          header: 'Name',
-          key: 'name',
-          width: 25,
-        },
-        {
-          header: 'Register Number',
-          key: 'registerNumber',
-          width: 20,
-        },
-        {
-          header: 'Course',
-          key: 'course',
-          width: 30,
-        },
-        {
-          header: 'Semester',
-          key: 'semester',
-          width: 15,
-        },
-      ]
-    }
+        worksheet.addRow({
+          name: form.name,
+          registerNumber: form.registerNumber,
+          course: form.course,
+          semester: form.semester,
+          profileImage:form.profileImage
+        })
 
-    worksheet.addRow({
-      name: form.name,
-      registerNumber: form.registerNumber,
-      course: form.course,
-      semester: form.semester,
-    })
+        await workbook.xlsx.writeFile(filePath)
+      })
 
-    await workbook.xlsx.writeFile(filePath)
+    return this.excelWriteQueue
   }
 }
