@@ -8,7 +8,7 @@ export default class DownloadPdfCSVValidator {
         rules.required(),
         rules.minLength(1),
         rules.maxLength(255),
-        rules.regex(/^[a-zA-Z0-9_-]+\.(pdf|csv)$/),
+        rules.regex(/^[a-zA-Z0-9_-]+\.(pdf|csv|xlsx)$/),
       ]
     ),
   })
