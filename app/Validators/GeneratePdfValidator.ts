@@ -1,5 +1,4 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-
 export default class GeneratePdfValidator {
   public schema = schema.create({
     name: schema.string(
@@ -39,5 +38,6 @@ export default class GeneratePdfValidator {
     '*.required': 'This field is required',
     '*.minLength': 'This field must contain at least 2 characters',
     '*.maxLength': 'This field cannot exceed 100 characters',
+    'profileImage.url': 'The provided profile image must be a valid URL',
   }
 }

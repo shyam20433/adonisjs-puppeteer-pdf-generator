@@ -1,4 +1,5 @@
 import path from 'path'
+import fetch from 'node-fetch'
 import PdfRepository from 'App/Repositories/PdfRepository'
 
 type StudentForm = {
@@ -6,6 +7,7 @@ type StudentForm = {
   registerNumber: string
   course: string
   semester: number
+  profileImage: string
 }
 
 const pdfRepository =
@@ -22,6 +24,48 @@ export default class PdfService {
       'filledforms',
       filename
     )
+  }
+
+  public async validateImageUrl(
+    imageUrl: string
+  ): Promise<void> {
+
+    try {
+
+      const imageResponse = await fetch(imageUrl)
+
+      if (!imageResponse.ok) {
+
+        const error = new Error('Image URL is not accessible.')
+        ;(error as any).status = 400
+        throw error
+
+      }
+
+      const contentType = imageResponse.headers.get('content-type')
+
+      if (!contentType || !contentType.toLowerCase().startsWith('image/')) {
+
+        const error = new Error('The provided URL does not return an image')
+        ;(error as any).status = 400
+        throw error
+
+      }
+
+    } catch (error: any) {
+
+      if (
+        error.message === 'Image URL is not accessible.' ||
+        error.message === 'The provided URL does not return an image'
+      ) {
+        throw error
+      }
+
+      const err = new Error('Image URL is not accessible.')
+      ;(err as any).status = 400
+      throw err
+
+    }
   }
 
   public async saveStudentToCsv(
@@ -60,6 +104,10 @@ export default class PdfService {
     pdf: Buffer
     fileName: string
   }> {
+
+    await this.validateImageUrl(
+      form.profileImage
+    )
 
     const pdf =
       await pdfRepository.generatePdf(

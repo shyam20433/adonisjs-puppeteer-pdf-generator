@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Student Details</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
   <style>
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       padding: 60px 24px;
@@ -28,9 +24,6 @@
         radial-gradient(circle at 75% 90%, rgba(140, 0, 255, 0.30), transparent 45%),
         linear-gradient(160deg, #0A0116, #120324 60%, #0A0116);
     }
-
-    /* ===== CARD SHELL WITH NEON BORDER GLOW ===== */
-
     .card-wrap {
       position: relative;
       width: 100%;
@@ -43,16 +36,13 @@
         0 0 46px rgba(0, 224, 255, 0.30),
         0 30px 60px rgba(0, 0, 0, 0.55);
     }
-
     .card {
       width: 100%;
       background: #120A24;
       border-radius: 32px;
       overflow: hidden;
     }
-
     /* ===== PHOTO ===== */
-
     .photo {
       position: relative;
       width: 100%;
@@ -60,7 +50,6 @@
       background: linear-gradient(135deg, #2A1246, #170A2E);
       overflow: hidden;
     }
-
     .photo img {
       width: 100%;
       height: 100%;
@@ -68,7 +57,6 @@
       display: block;
       filter: saturate(1.08) contrast(1.03);
     }
-
     .photo-fallback {
       display: none;
       width: 100%;
@@ -77,9 +65,7 @@
       justify-content: center;
       color: rgba(255,255,255,0.6);
     }
-
     .photo-fallback svg { width: 64px; height: 64px; }
-
     .id-pill {
       position: absolute;
       top: 18px;
@@ -99,9 +85,7 @@
       text-transform: uppercase;
       text-shadow: 0 0 8px rgba(0, 224, 255, 0.8);
     }
-
     .id-pill svg { width: 13px; height: 13px; filter: drop-shadow(0 0 4px rgba(0,224,255,0.9)); }
-
     .photo-fade {
       position: absolute;
       left: 0; right: 0; bottom: 0;
@@ -109,13 +93,9 @@
       background: linear-gradient(to top, #120A24, rgba(18,10,36,0));
       pointer-events: none;
     }
-
-    /* ===== INFO ===== */
-
     .info {
       padding: 26px 28px 22px;
     }
-
     .info h1 {
       margin: 0 0 16px;
       font-family: 'Poppins', sans-serif;
@@ -126,7 +106,6 @@
         0 0 10px rgba(255, 46, 154, 0.55),
         0 0 22px rgba(255, 46, 154, 0.28);
     }
-
     .info-row {
       display: flex;
       align-items: center;
@@ -135,7 +114,6 @@
       color: #B9AFCC;
       font-size: 14.5px;
     }
-
     .info-row svg {
       width: 17px;
       height: 17px;
@@ -143,32 +121,26 @@
       flex-shrink: 0;
       filter: drop-shadow(0 0 5px rgba(0, 224, 255, 0.65));
     }
-
     .info-row span {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
     /* ===== STATS ===== */
-
     .stats {
       display: flex;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       margin: 6px 28px 18px;
     }
-
     .stat {
       flex: 1;
       text-align: center;
       padding: 18px 6px;
     }
-
     .stat:first-child {
       border-right: 1px solid rgba(255, 255, 255, 0.08);
     }
-
     .stat-value {
       font-family: 'Poppins', sans-serif;
       font-size: 22px;
@@ -176,7 +148,6 @@
       color: #6BEEFF;
       text-shadow: 0 0 10px rgba(0, 224, 255, 0.75), 0 0 22px rgba(0, 224, 255, 0.35);
     }
-
     .stat-value.verified-value {
       display: inline-flex;
       align-items: center;
@@ -184,26 +155,21 @@
       color: #5CFFA8;
       text-shadow: 0 0 10px rgba(92, 255, 168, 0.75), 0 0 22px rgba(92, 255, 168, 0.35);
     }
-
     .stat-value.verified-value svg {
       width: 18px;
       height: 18px;
       filter: drop-shadow(0 0 6px rgba(92, 255, 168, 0.85));
     }
-
     .stat-label {
       margin-top: 5px;
       font-size: 12px;
       color: #83789A;
       letter-spacing: 0.3px;
     }
-
     /* ===== FOOTER ===== */
-
     .menu {
       padding: 4px 28px 26px;
     }
-
     .menu-row {
       display: flex;
       align-items: center;
@@ -213,7 +179,6 @@
       font-size: 13.5px;
       font-weight: 500;
     }
-
     .menu-row svg {
       width: 18px;
       height: 18px;
@@ -221,7 +186,6 @@
       flex-shrink: 0;
       filter: drop-shadow(0 0 5px rgba(255, 46, 154, 0.65));
     }
-
     .menu-row .badge {
       margin-left: auto;
       font-size: 11.5px;
@@ -233,19 +197,15 @@
       border-radius: 12px;
       text-shadow: 0 0 6px rgba(92, 255, 168, 0.6);
     }
-
     @media (max-width: 420px) {
       body { padding: 32px 16px; }
       .photo { height: 220px; }
     }
   </style>
 </head>
-
 <body>
-
   <div class="card-wrap">
     <div class="card">
-
       <!-- PHOTO -->
       <div class="photo">
         <img
@@ -259,21 +219,17 @@
             <path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" stroke-linecap="round"/>
           </svg>
         </div>
-
         <div class="id-pill">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 3 2 8l10 5 10-5-10-5Z" stroke-linejoin="round"/>
           </svg>
           Student ID
         </div>
-
         <div class="photo-fade"></div>
       </div>
-
       <!-- INFO -->
       <div class="info">
         <h1>{{ name }}</h1>
-
         <div class="info-row">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <rect x="3.5" y="5" width="17" height="14" rx="2.4"/>
@@ -281,7 +237,6 @@
           </svg>
           <span>{{ registerNumber }}</span>
         </div>
-
         <div class="info-row">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M4 5.5c2.5-1 5-1 7 0v13c-2-1-4.5-1-7 0v-13Z" stroke-linejoin="round"/>
@@ -290,7 +245,6 @@
           <span>{{ course }}</span>
         </div>
       </div>
-
       <!-- STATS -->
       <div class="stats">
         <div class="stat">
