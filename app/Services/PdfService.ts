@@ -1,5 +1,4 @@
 import path from 'path'
-import fetch from 'node-fetch'
 import PdfRepository from 'App/Repositories/PdfRepository'
 
 type StudentForm = {
@@ -8,6 +7,10 @@ type StudentForm = {
   course: string
   semester: number
   profileImage: string
+  image2: string
+  image3: string
+  image4: string
+  image5: string
 }
 
 const pdfRepository =
@@ -26,51 +29,30 @@ export default class PdfService {
     )
   }
 
-  public async validateImageUrl(
-    imageUrl: string
-  ): Promise<void> {
+  private async createFolder(): Promise<void> {
 
-    try {
+    const folderPath =
+      path.join(
+        process.cwd(),
+        'filledforms'
+      )
 
-      const imageResponse = await fetch(imageUrl)
+    const fs =
+      await import('fs/promises')
 
-      if (!imageResponse.ok) {
-
-        const error = new Error('Image URL is not accessible.')
-        ;(error as any).status = 400
-        throw error
-
+    await fs.mkdir(
+      folderPath,
+      {
+        recursive: true,
       }
-
-      const contentType = imageResponse.headers.get('content-type')
-
-      if (!contentType || !contentType.toLowerCase().startsWith('image/')) {
-
-        const error = new Error('The provided URL does not return an image')
-        ;(error as any).status = 400
-        throw error
-
-      }
-
-    } catch (error: any) {
-
-      if (
-        error.message === 'Image URL is not accessible.' ||
-        error.message === 'The provided URL does not return an image'
-      ) {
-        throw error
-      }
-
-      const err = new Error('Image URL is not accessible.')
-      ;(err as any).status = 400
-      throw err
-
-    }
+    )
   }
 
   public async saveStudentToCsv(
     form: StudentForm
   ): Promise<void> {
+
+    await this.createFolder()
 
     const filePath =
       this.buildFilePath(
@@ -86,6 +68,8 @@ export default class PdfService {
   public async saveStudentToExcel(
     form: StudentForm
   ): Promise<void> {
+
+    await this.createFolder()
 
     const filePath =
       this.buildFilePath(
@@ -105,30 +89,12 @@ export default class PdfService {
     fileName: string
   }> {
 
-    await this.validateImageUrl(
-      form.profileImage
-    )
-
     const pdf =
       await pdfRepository.generatePdf(
         form
       )
 
-    const folderPath =
-      path.join(
-        process.cwd(),
-        'filledforms'
-      )
-
-    const fs =
-      await import('fs/promises')
-
-    await fs.mkdir(
-      folderPath,
-      {
-        recursive: true,
-      }
-    )
+    await this.createFolder()
 
     const safeName =
       form.name.replace(
@@ -148,8 +114,12 @@ export default class PdfService {
       `${form.registerNumber}_${formattedDate}_${safeName}.pdf`
 
     await Promise.all([
-      this.saveStudentToCsv(form),
-      this.saveStudentToExcel(form),
+      this.saveStudentToCsv(
+        form
+      ),
+      this.saveStudentToExcel(
+        form
+      ),
     ])
 
     return {
@@ -163,7 +133,9 @@ export default class PdfService {
   ): Promise<string> {
 
     const filePath =
-      this.buildFilePath(filename)
+      this.buildFilePath(
+        filename
+      )
 
     await pdfRepository.checkFile(
       filePath

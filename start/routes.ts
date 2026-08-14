@@ -1,9 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
+Route.get('/student-data', 'PdfController.generate')
 Route.get(
-  '/generate-pdf',
-  'PdfController.generate'
-)
-Route.get(
-  '/download-pdf',
-  'PdfController.download'
+  '/download-student-details',
+  'PdfController.downloadStudentDetails'
 )
