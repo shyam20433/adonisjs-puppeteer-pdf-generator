@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>
+    Student Details
+  </title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #0A0116;
+      color: #FFFFFF;
+    }
+
+    .student-page {
+
+      width: 100%;
+      min-height: 100vh;
+
+      padding: 50px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      page-break-after: always;
+      break-after: page;
+
+    }
+
+    .student-page:last-child {
+
+      page-break-after: auto;
+      break-after: auto;
+
+    }
+
+    .student-card {
+
+      width: 100%;
+      max-width: 700px;
+
+      padding: 35px;
+
+      border-radius: 25px;
+
+      background: #120A24;
+
+      border:
+        2px solid
+        #8A2BE2;
+
+      box-shadow:
+        0 0 30px
+        rgba(138, 43, 226, 0.35);
+
+    }
+
+    .student-title {
+
+      margin-bottom: 30px;
+
+      font-size: 30px;
+
+      font-weight: 700;
+
+      color: #6BEEFF;
+
+      text-align: center;
+
+    }
+
+    .student-image {
+
+      width: 220px;
+      height: 220px;
+
+      margin: 0 auto 30px;
+
+      display: block;
+
+      object-fit: cover;
+
+      border-radius: 20px;
+
+      border:
+        2px solid
+        #00E0FF;
+
+    }
+
+    .details {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 18px;
+
+    }
+
+    .row {
+
+      display: flex;
+
+      align-items: center;
+
+      padding: 15px 18px;
+
+      border-radius: 12px;
+
+      background:
+        rgba(255,255,255,0.05);
+
+    }
+
+    .label {
+
+      width: 180px;
+
+      font-weight: 700;
+
+      color: #FF2E9A;
+
+    }
+
+    .value {
+
+      flex: 1;
+
+      color: #FFFFFF;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  @each(student in students)
+
+    <div class="student-page">
+
+      <div class="student-card">
+
+        <div class="student-title">
+
+  {{ student.name }}
+
+</div>
+
+        <img
+          class="student-image"
+          src="{{ student.profileImage }}"
+          alt="{{ student.name }}"
+        >
+
+        <div class="details">
+
+          <div class="row">
+
+            <div class="label">
+              Name
+            </div>
+
+            <div class="value">
+              {{ student.name }}
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="label">
+              Register Number
+            </div>
+
+            <div class="value">
+              {{ student.registerNumber }}
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="label">
+              Course
+            </div>
+
+            <div class="value">
+              {{ student.course }}
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="label">
+              Semester
+            </div>
+
+            <div class="value">
+              {{ student.semester }}
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="label">
+              Profile Image
+            </div>
+
+            <div class="value">
+              {{ student.profileImage }}
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  @endeach
+
+</body>
+
+</html>
