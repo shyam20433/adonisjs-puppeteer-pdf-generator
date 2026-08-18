@@ -11,14 +11,8 @@ type CsvStudent = {
 }
 
 export default class StudentDetailsRepository {
-
-  private parseCsv(
-    csv: string
-  ): CsvStudent[] {
-
-    const lines =
-      csv
-        .split('\n')
+  private parseCsv(csv: string): CsvStudent[] {
+    const lines =csv.split('\n')
         .map(
           line => line.trim()
         )
@@ -26,10 +20,7 @@ export default class StudentDetailsRepository {
           line => line.length > 0
         )
 
-    if (
-      lines.length <= 1
-    ) {
-
+    if (lines.length <= 1){
       throw new Error(
         'No student records found'
       )
@@ -38,12 +29,7 @@ export default class StudentDetailsRepository {
     const students:
       CsvStudent[] = []
 
-    for (
-      let index = 1;
-      index < lines.length;
-      index++
-    ) {
-
+    for (let index = 1;index < lines.length;index++){
       const values =
         lines[index]
           .match(

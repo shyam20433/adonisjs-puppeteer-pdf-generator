@@ -17,7 +17,7 @@ export default class PdfController {
         const result =await pdfService.generatePdf(form)
         response.header(
           'Content-Type',
-          'application/pdf'
+          'application/pdf' //'image/jpeg' for screenshots
         )
         response.header(
           'Content-Disposition',
@@ -74,7 +74,7 @@ export default class PdfController {
     )
     response.header(
       'Content-Disposition',
-      'attachment; filename="student-details.pdf"'
+      'inline; filename="student-details.pdf"'
     )
 
     return response.send(

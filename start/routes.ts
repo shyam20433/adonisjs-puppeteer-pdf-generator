@@ -4,3 +4,7 @@ Route.get(
   '/download-student-details',
   'PdfController.downloadStudentDetails'
 )
+Route.get(
+  '/puppeteer-lab',
+  'PuppeteerLabController.run'
+)
