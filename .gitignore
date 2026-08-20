@@ -12,4 +12,4 @@ app/Services/LocalImagePdfService.ts
 Remove_Duplicates.py
 app/Repositories/LocalImagePdfRepository.ts
 app/Services/LocalImagePdfService.ts
-app/Services/PageWiseImagePdfService.ts
+
