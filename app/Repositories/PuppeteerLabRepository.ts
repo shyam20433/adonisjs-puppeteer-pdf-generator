@@ -17,6 +17,8 @@ import puppeteer, {
 /puppeteer-lab?test=screenshot
 /puppeteer-lab?test=pdf
 /puppeteer-lab?test=pdf-options
+/puppeteer-lab?test=permissions
+/puppeteer-lab?test=invalid-click
 
  */
 type StudentForm = {
@@ -84,7 +86,7 @@ export default class PuppeteerLabRepository {
   }
 
 
-//launch
+  //launch
 
 
   public async testLaunch(): Promise<object> {
@@ -104,7 +106,7 @@ export default class PuppeteerLabRepository {
     }
   }
 
-//viewport
+  //viewport
 
   public async testViewport(
     form: StudentForm
@@ -143,7 +145,7 @@ export default class PuppeteerLabRepository {
     }
   }
 
-//selector
+  //selector
   public async testSelector(
     form: StudentForm
   ): Promise<object> {
@@ -188,7 +190,7 @@ export default class PuppeteerLabRepository {
     }
   }
 
-//evaluate
+  //evaluate
 
   public async testEvaluate(
     form: StudentForm
@@ -252,7 +254,7 @@ export default class PuppeteerLabRepository {
     }
   }
 
-//network idle
+  //network idle
 
   public async testNetworkIdle(
     form: StudentForm
@@ -277,7 +279,7 @@ export default class PuppeteerLabRepository {
       await page.setContent(
         html,
         {
-          waitUntil:'load', //networkidle2
+          waitUntil: 'load', //networkidle2
         }
       )
 
@@ -298,7 +300,7 @@ export default class PuppeteerLabRepository {
     }
   }
 
-//response
+  //response
   public async testResponse(
     form: StudentForm
   ): Promise<object> {
@@ -354,7 +356,7 @@ export default class PuppeteerLabRepository {
     }
   }
 
-//request failed
+  //request failed
 
 
   public async testRequestFailed(
@@ -414,30 +416,28 @@ export default class PuppeteerLabRepository {
   }
 
   //abort image
+
   public async testAbortImages(
     form: StudentForm
-  ): Promise<object> {
+  ): Promise<Buffer> {
 
     const {
       browser,
       page,
     } = await this.createPage()
 
-    let abortedImages: string[] = []
+    const abortedImages: string[] = []
 
     try {
 
-      await page.setRequestInterception(
-        true
-      )
+      await page.setRequestInterception(true)
 
       page.on(
         'request',
         request => {
 
           if (
-            request.resourceType()
-            === 'image'
+            request.resourceType() === 'image'
           ) {
 
             abortedImages.push(
@@ -450,7 +450,6 @@ export default class PuppeteerLabRepository {
           }
 
           request.continue()
-
         }
       )
 
@@ -459,24 +458,15 @@ export default class PuppeteerLabRepository {
         form
       )
 
-      const imageCount =
-        await page.evaluate(() => {
-
-          return document
-            .querySelectorAll(
-              '.pdf-page img'
-            )
-            .length
-
+      // Generate PDF after image requests
+      // have been aborted
+      const pdf =
+        await page.pdf({
+          format: 'A4',
+          printBackground: true,
         })
 
-      return {
-        test: 'abort-images',
-        status: 'passed',
-        imageElements:
-          imageCount,
-        abortedImages,
-      }
+      return Buffer.from(pdf)
 
     } finally {
 
@@ -485,7 +475,7 @@ export default class PuppeteerLabRepository {
     }
   }
 
-//screenshot
+  //screenshot
   public async testScreenshot(
     form: StudentForm
   ): Promise<Buffer> {
@@ -519,7 +509,7 @@ export default class PuppeteerLabRepository {
     }
   }
 
-//pdf
+  //pdf
   public async testPdf(
     form: StudentForm
   ): Promise<Buffer> {
@@ -556,56 +546,278 @@ export default class PuppeteerLabRepository {
   //invalid button click
 
   public async testInvalidClick(
-  form: StudentForm
-): Promise<object> {
+    form: StudentForm
+  ): Promise<object> {
 
-  const {
-    browser,
-    page,
-  } = await this.createPage()
-
-  try {
-
-    await this.loadStudentPage(
+    const {
+      browser,
       page,
-      form
-    )
+    } = await this.createPage()
 
     try {
 
-      await page.click(
-        '#invalid-button'
+      await this.loadStudentPage(
+        page,
+        form
       )
 
-      return {
-        test: 'invalid-click',
-        status: 'unexpected',
-        message:
-          'Button was found and clicked',
+      try {
+
+        await page.click(
+          '#invalid-button'
+        )
+
+        return {
+          test: 'invalid-click',
+          status: 'unexpected',
+          message:
+            'Button was found and clicked',
+        }
+
+      } catch (error) {
+
+        return {
+          test: 'invalid-click',
+          status: 'passed',
+          message:
+            'Expected error occurred while clicking invalid selector',
+          error:
+            error instanceof Error
+              ? error.message
+              : String(error),
+        }
       }
 
-    } catch (error) {
+    } finally {
+
+      await browser.close()
+
+    }
+  }
+  //permissions
+
+  public async testPermissions(): Promise<object> {
+
+    const browser = await puppeteer.launch({
+      headless: false,
+    })
+
+    try {
+
+      const context =
+        browser.defaultBrowserContext()
+
+      await context.overridePermissions(
+        'http://127.0.0.1:3333',
+        ['geolocation']
+      )
+
+      const page =
+        await browser.newPage()
+
+      await page.setGeolocation({
+        latitude: 13.0827,
+        longitude: 80.2707,
+      })
+
+      await page.goto(
+        'http://127.0.0.1:3333/geolocation-test',
+        {
+          waitUntil: 'load',
+        }
+      )
+
+      const permission =
+        await page.evaluate(async () => {
+
+          const result =
+            await navigator.permissions.query({
+              name: 'geolocation',
+            })
+
+          return result.state
+        })
+
+      const location =
+        await page.evaluate(() => {
+
+          return new Promise((resolve) => {
+
+            navigator.geolocation.getCurrentPosition(
+
+              position => {
+
+                resolve({
+                  success: true,
+                  latitude:
+                    position.coords.latitude,
+                  longitude:
+                    position.coords.longitude,
+                })
+
+              },
+
+              error => {
+
+                resolve({
+                  success: false,
+                  error:
+                    error.message,
+                  code:
+                    error.code,
+                })
+
+              }
+
+            )
+
+          })
+
+        })
 
       return {
-        test: 'invalid-click',
+        test: 'permissions',
         status: 'passed',
-        message:
-          'Expected error occurred while clicking invalid selector',
-        error:
-          error instanceof Error
-            ? error.message
-            : String(error),
+        permission,
+        location,
       }
+
+    } finally {
+
+      await browser.close()
+
+    }
+  }
+
+
+  //load networkidle2 and 0
+public async testWaitUntil(
+  waitUntil: 'load' | 'networkidle0' | 'networkidle2'
+): Promise<object> {
+
+  const browser = await puppeteer.launch({
+    headless: true,
+  })
+
+  try {
+
+    const page = await browser.newPage()
+
+    const html = `
+      <!DOCTYPE html>
+
+      <html>
+
+      <body>
+
+        <h1>Puppeteer WaitUntil Test</h1>
+
+        <img
+          id="image1"
+          src="https://placehold.co/500x300/png"
+        >
+
+        <img
+          id="image2"
+          src="https://placehold.co/500x301/png"
+        >
+
+        <img
+          id="image3"
+          src="https://placehold.co/500x302/png"
+        >
+
+        <img
+          id="image4"
+          src="https://placehold.co/500x303/png"
+        >
+
+        <img
+          id="image5"
+          src="https://placehold.co/500x304/png"
+        >
+
+      </body>
+
+      </html>
+    `
+
+    const start = Date.now()
+
+    await page.setContent(
+      html,
+      {
+        waitUntil,
+      }
+    )
+
+    const end = Date.now()
+
+    const imageStatus =
+      await page.evaluate(() => {
+
+        const images =
+          Array.from(
+            document.querySelectorAll('img')
+          ) as HTMLImageElement[]
+
+        return images.map(
+          (image, index) => {
+
+            return {
+
+              image:
+                index + 1,
+
+              url:
+                image.src,
+
+              complete:
+                image.complete,
+
+              loaded:
+                image.complete &&
+                image.naturalWidth > 0,
+
+              naturalWidth:
+                image.naturalWidth,
+
+            }
+
+          }
+        )
+      })
+
+    return {
+
+      test:
+        'wait-until',
+
+      waitUntil,
+
+      timeTaken:
+        `${end - start} ms`,
+
+      totalImages:
+        imageStatus.length,
+
+      loadedImages:
+        imageStatus.filter(
+          image => image.loaded
+        ).length,
+
+      imageStatus,
+
     }
 
   } finally {
 
     await browser.close()
-
   }
 }
 
-//pdf options
+
+  //pdf options
   public async testPdfOptions(
     form: StudentForm
   ): Promise<Buffer> {
@@ -622,48 +834,57 @@ export default class PuppeteerLabRepository {
         form
       )
 
-      const pdf =
-        await page.pdf({
+      const pdf = await page.pdf({
 
-          format: 'A3',
+        format: 'A4',
 
-          landscape: false,
+        landscape: false,
 
-          printBackground: true,
+        printBackground: true,
 
-          margin: {
-            top: '30px',
-            bottom: '30px',
-            left: '20px',
-            right: '20px',
-          },
+        margin: {
+          top: '75px',
+          bottom: '45px',
+          left: '20px',
+          right: '20px',
+        },
 
-          displayHeaderFooter:
-            true,
+        displayHeaderFooter: true,
 
-          headerTemplate: `
-            <div style="
-              width: 100%;
-              text-align: center;
-              font-size: 10px;
-            ">
-              Student Academic Record
-            </div>
-          `,
+        headerTemplate: `
+    <div style="
+      width: 100%;
+      padding: 0 56px 10px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #14213D;
+      text-align: center;
+      border-bottom: 1px solid #E3E1E8;
+    ">
+      Student Academic Record
+    </div>
+  `,
 
-          footerTemplate: `
-            <div style="
-              width: 100%;
-              text-align: center;
-              font-size: 10px;
-            ">
-              Page
-              <span class="pageNumber"></span>
-              of
-              <span class="totalPages"></span>
-            </div>
-          `,
-        })
+        footerTemplate: `
+    <div style="
+      width: 100%;
+      padding: 8px 56px 0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      color: #9A97A3;
+      text-align: center;
+      border-top: 1px solid #E3E1E8;
+      display: flex;
+      justify-content: space-between;
+    ">
+      <span></span>
+      <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
+    </div>
+  `,
+      })
 
       return Buffer.from(
         pdf
@@ -673,6 +894,65 @@ export default class PuppeteerLabRepository {
 
       await browser.close()
 
+    }
+  }
+
+  //connect
+
+
+  public async testConnect(): Promise<object> {
+    const browser =
+      await puppeteer.launch({
+        headless: false,
+      })
+
+    const browserWSEndpoint =
+      browser.wsEndpoint()
+
+    browser.disconnect()
+
+    const connectedBrowser =
+      await puppeteer.connect({
+        browserWSEndpoint,
+      })
+
+    try {
+
+      const page =
+        await connectedBrowser.newPage()
+
+      await page.goto(
+        'https://footballplayers.onrender.com/players',
+        {
+          waitUntil: 'networkidle2',
+        }
+      )
+
+      const title =
+        await page.title()
+
+      const url =
+        page.url()
+
+      return {
+        test: 'connect',
+        status: 'passed',
+
+        message:
+          'Successfully disconnected and reconnected to the running browser',
+
+        browserWSEndpoint,
+
+        title,
+
+        url,
+      }
+
+    } finally {
+
+      // Disconnect Puppeteer
+      // Browser itself remains running
+      connectedBrowser.disconnect()
     }
   }
 }

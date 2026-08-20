@@ -1,0 +1,140 @@
+<script>
+
+  document
+    .querySelectorAll('.chart')
+    .forEach(chart => {
+
+      const chartType =
+        chart.dataset.chartType
+
+      if (chartType !== 'pie') {
+        return
+      }
+
+      const chartData =
+        JSON.parse(
+          chart.dataset.chartData
+        )
+
+      const svg =
+        chart.querySelector('.pie-chart')
+
+      if (
+        !svg ||
+        !chartData ||
+        chartData.length === 0
+      ) {
+        return
+      }
+
+      const total =
+        chartData.reduce(
+          (sum, item) =>
+            sum + Number(item.value),
+          0
+        )
+
+      if (total <= 0) {
+        return
+      }
+
+      const colors = [
+        '#4CAF50',
+        '#F44336',
+        '#2196F3',
+        '#FF9800',
+        '#9C27B0',
+        '#009688'
+      ]
+
+      let currentAngle = 0
+
+      const center = 100
+      const radius = 80
+
+      chartData.forEach(
+        (item, index) => {
+
+          const value =
+            Number(item.value)
+
+          const percentage =
+            value / total
+
+          const angle =
+            percentage * 360
+
+          const startAngle =
+            currentAngle
+
+          const endAngle =
+            currentAngle + angle
+
+          const startRadians =
+            (startAngle - 90)
+            * Math.PI / 180
+
+          const endRadians =
+            (endAngle - 90)
+            * Math.PI / 180
+
+          const x1 =
+            center +
+            radius *
+            Math.cos(startRadians)
+
+          const y1 =
+            center +
+            radius *
+            Math.sin(startRadians)
+
+          const x2 =
+            center +
+            radius *
+            Math.cos(endRadians)
+
+          const y2 =
+            center +
+            radius *
+            Math.sin(endRadians)
+
+          const largeArcFlag =
+            angle > 180
+              ? 1
+              : 0
+
+          const path =
+            document.createElementNS(
+              'http://www.w3.org/2000/svg',
+              'path'
+            )
+
+          const pathData =
+            `M ${center} ${center}
+             L ${x1} ${y1}
+             A ${radius} ${radius} 0
+             ${largeArcFlag} 1
+             ${x2} ${y2}
+             Z`
+
+          path.setAttribute(
+            'd',
+            pathData
+          )
+
+          path.setAttribute(
+            'fill',
+            colors[
+              index % colors.length
+            ]
+          )
+
+          svg.appendChild(path)
+
+          currentAngle =
+            endAngle
+        }
+      )
+    })
+
+</script>

@@ -1,750 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Details</title>
-
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  >
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      background: #0A0116;
-    }
-
-    body {
-      font-family: 'Inter', Arial, Helvetica, sans-serif;
-      background: #0A0116;
-      background-image:
-        radial-gradient(
-          circle at 18% 20%,
-          rgba(255, 0, 200, 0.28),
-          transparent 42%
-        ),
-        radial-gradient(
-          circle at 85% 15%,
-          rgba(0, 224, 255, 0.22),
-          transparent 40%
-        ),
-        radial-gradient(
-          circle at 75% 90%,
-          rgba(140, 0, 255, 0.30),
-          transparent 45%
-        ),
-        linear-gradient(
-          160deg,
-          #0A0116,
-          #120324 60%,
-          #0A0116
-        );
-    }
-
-    /* =========================
-       PDF PAGE
-       ========================= */
-
-    .pdf-page {
-      width: 100%;
-      min-height: 100vh;
-
-      padding: 60px 24px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      page-break-after: always;
-      break-after: page;
-
-      overflow: hidden;
-    }
-
-    .pdf-page:last-child {
-      page-break-after: auto;
-      break-after: auto;
-    }
-
-    /* =========================
-       FIRST PAGE
-       ========================= */
-
-    .card-wrap {
-      position: relative;
-      width: 100%;
-      max-width: 380px;
-
-      border-radius: 34px;
-      padding: 2px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #FF2E9A,
-          #8A2BE2 45%,
-          #00E0FF 100%
-        );
-
-      box-shadow:
-        0 0 22px rgba(255, 46, 154, 0.45),
-        0 0 46px rgba(0, 224, 255, 0.30),
-        0 30px 60px rgba(0, 0, 0, 0.55);
-    }
-
-    .card {
-      width: 100%;
-
-      background: #120A24;
-
-      border-radius: 32px;
-
-      overflow: hidden;
-    }
-
-    /* =========================
-       PHOTO
-       ========================= */
-
-    .photo {
-      position: relative;
-
-      width: 100%;
-      height: 260px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #2A1246,
-          #170A2E
-        );
-
-      overflow: hidden;
-    }
-
-    .photo img {
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-
-      display: block;
-
-      filter:
-        saturate(1.08)
-        contrast(1.03);
-    }
-
-    .photo-fallback {
-      display: none;
-
-      width: 100%;
-      height: 100%;
-
-      align-items: center;
-      justify-content: center;
-
-      color: rgba(255,255,255,0.6);
-    }
-
-    .photo-fallback svg {
-      width: 64px;
-      height: 64px;
-    }
-
-    .id-pill {
-      position: absolute;
-
-      top: 18px;
-      left: 18px;
-
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      padding: 7px 13px;
-
-      border-radius: 20px;
-
-      background:
-        rgba(10, 1, 22, 0.55);
-
-      backdrop-filter: blur(6px);
-
-      border:
-        1px solid
-        rgba(0, 224, 255, 0.55);
-
-      color: #6BEEFF;
-
-      font-size: 11px;
-
-      font-weight: 600;
-
-      letter-spacing: 1.2px;
-
-      text-transform: uppercase;
-
-      text-shadow:
-        0 0 8px
-        rgba(0, 224, 255, 0.8);
-    }
-
-    .id-pill svg {
-      width: 13px;
-      height: 13px;
-
-      filter:
-        drop-shadow(
-          0 0 4px
-          rgba(0,224,255,0.9)
-        );
-    }
-
-    .photo-fade {
-      position: absolute;
-
-      left: 0;
-      right: 0;
-      bottom: 0;
-
-      height: 90px;
-
-      background:
-        linear-gradient(
-          to top,
-          #120A24,
-          rgba(18,10,36,0)
-        );
-
-      pointer-events: none;
-    }
-
-    /* =========================
-       INFO
-       ========================= */
-
-    .info {
-      padding: 26px 28px 22px;
-    }
-
-    .info h1 {
-      margin: 0 0 16px;
-
-      font-family: 'Poppins', sans-serif;
-
-      font-size: 25px;
-
-      font-weight: 700;
-
-      color: #FFFFFF;
-
-      text-shadow:
-        0 0 10px
-        rgba(255, 46, 154, 0.55),
-
-        0 0 22px
-        rgba(255, 46, 154, 0.28);
-    }
-
-    .info-row {
-      display: flex;
-
-      align-items: center;
-
-      gap: 10px;
-
-      margin-bottom: 10px;
-
-      color: #B9AFCC;
-
-      font-size: 14.5px;
-    }
-
-    .info-row svg {
-      width: 17px;
-      height: 17px;
-
-      color: #00E0FF;
-
-      flex-shrink: 0;
-
-      filter:
-        drop-shadow(
-          0 0 5px
-          rgba(0, 224, 255, 0.65)
-        );
-    }
-
-    .info-row span {
-      overflow: hidden;
-
-      text-overflow: ellipsis;
-
-      white-space: nowrap;
-    }
-
-    /* =========================
-       STATS
-       ========================= */
-
-    .stats {
-      display: flex;
-
-      border-top:
-        1px solid
-        rgba(255, 255, 255, 0.08);
-
-      border-bottom:
-        1px solid
-        rgba(255, 255, 255, 0.08);
-
-      margin:
-        6px 28px 18px;
-    }
-
-    .stat {
-      flex: 1;
-
-      text-align: center;
-
-      padding: 18px 6px;
-    }
-
-    .stat:first-child {
-      border-right:
-        1px solid
-        rgba(255, 255, 255, 0.08);
-    }
-
-    .stat-value {
-      font-family: 'Poppins', sans-serif;
-
-      font-size: 22px;
-
-      font-weight: 700;
-
-      color: #6BEEFF;
-
-      text-shadow:
-        0 0 10px
-        rgba(0, 224, 255, 0.75),
-
-        0 0 22px
-        rgba(0, 224, 255, 0.35);
-    }
-
-    .stat-value.verified-value {
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      color: #5CFFA8;
-
-      text-shadow:
-        0 0 10px
-        rgba(92, 255, 168, 0.75),
-
-        0 0 22px
-        rgba(92, 255, 168, 0.35);
-    }
-
-    .stat-value.verified-value svg {
-      width: 18px;
-      height: 18px;
-
-      filter:
-        drop-shadow(
-          0 0 6px
-          rgba(92, 255, 168, 0.85)
-        );
-    }
-
-    .stat-label {
-      margin-top: 5px;
-
-      font-size: 12px;
-
-      color: #83789A;
-
-      letter-spacing: 0.3px;
-    }
-
-    /* =========================
-       FOOTER
-       ========================= */
-
-    .menu {
-      padding: 4px 28px 26px;
-    }
-
-    .menu-row {
-      display: flex;
-
-      align-items: center;
-
-      gap: 12px;
-
-      padding: 8px 0;
-
-      color: #C9C0DA;
-
-      font-size: 13.5px;
-
-      font-weight: 500;
-    }
-
-    .menu-row svg {
-      width: 18px;
-      height: 18px;
-
-      color: #FF2E9A;
-
-      flex-shrink: 0;
-
-      filter:
-        drop-shadow(
-          0 0 5px
-          rgba(255, 46, 154, 0.65)
-        );
-    }
-
-    .menu-row .badge {
-      margin-left: auto;
-
-      font-size: 11.5px;
-
-      font-weight: 700;
-
-      color: #5CFFA8;
-
-      background:
-        rgba(92, 255, 168, 0.10);
-
-      border:
-        1px solid
-        rgba(92, 255, 168, 0.35);
-
-      padding: 4px 10px;
-
-      border-radius: 12px;
-
-      text-shadow:
-        0 0 6px
-        rgba(92, 255, 168, 0.6);
-    }
-
-    /* =========================
-       IMAGE PAGES
-       ========================= */
-
-    .visual-page {
-      flex-direction: column;
-
-      background: #0A0116;
-    }
-
-    .visual-page h1 {
-      margin: 0 0 30px;
-
-      font-family: 'Poppins', sans-serif;
-
-      font-size: 30px;
-
-      font-weight: 700;
-
-      color: #FFFFFF;
-
-      text-shadow:
-        0 0 10px
-        rgba(255, 46, 154, 0.55),
-
-        0 0 22px
-        rgba(255, 46, 154, 0.28);
-    }
-
-    .visual-page img {
-      width: 80%;
-
-      max-width: 900px;
-
-      max-height: 70vh;
-
-      object-fit: contain;
-
-      display: block;
-    }
-
-    @media (max-width: 420px) {
-
-      .pdf-page {
-        padding: 32px 16px;
-      }
-
-      .photo {
-        height: 220px;
-      }
-
-      .visual-page img {
-        width: 100%;
-      }
-
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Details</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* =========================
+     RESET / BASE
+     ========================= */
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #FFFFFF;
+  }
+
+  body {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    color: #1C1B1F;
+  }
+
+  /* =========================
+     PAGE (Puppeteer: set pageSize A4 / Letter in printToPDF options)
+     ========================= */
+  .pdf-page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 64px 72px;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .pdf-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  /* =========================
+     PAGE 1 — DETAILS FORM
+     ========================= */
+
+  .doc-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 3px solid #14213D;
+    padding-bottom: 18px;
+    margin-bottom: 34px;
+  }
+
+  .doc-header .eyebrow {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #6B6E76;
+    margin-bottom: 6px;
+  }
+
+  .doc-header h1 {
+    margin: 0;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #14213D;
+  }
+
+  .doc-header .doc-id {
+    text-align: right;
+    font-size: 12.5px;
+    color: #6B6E76;
+    line-height: 1.6;
+  }
+
+  .doc-main {
+    margin-top: 56px;
+  }
+
+  .doc-body {
+    width: 100%;
+    display: flex;
+    gap: 48px;
+  }
+
+  /* --- Photo block --- */
+  .photo-block {
+    flex: 0 0 188px;
+  }
+
+  .photo-frame {
+    width: 188px;
+    height: 232px;
+    border: 1px solid #D8D6DE;
+    background: #F6F5F8;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .photo-frame .photo-fallback {
+    display: none;
+    color: #B3B0BC;
+  }
+
+  .photo-frame .photo-fallback svg {
+    width: 52px;
+    height: 52px;
+  }
+
+  .photo-caption {
+    margin-top: 8px;
+    font-size: 11px;
+    color: #9A97A3;
+    text-align: center;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+
+  /* --- Form fields --- */
+  .fields {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 36px;
+  }
+
+  .field {
+    border-bottom: 1px solid #E3E1E8;
+    padding-bottom: 14px;
+  }
+
+  .field.full {
+    grid-column: 1 / -1;
+    padding-bottom: 22px;
+  }
+
+  .field.full .field-value {
+    font-size: 22px;
+  }
+
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #8A8792;
+    margin-bottom: 7px;
+  }
+
+  .field-value {
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #1C1B1F;
+  }
+
+  /* --- Footer --- */
+  .doc-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #E3E1E8;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #9A97A3;
+  }
+
+  /* =========================
+     IMAGE PAGES
+     ========================= */
+  .visual-page {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .visual-page .page-eyebrow {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #8A8792;
+    margin-bottom: 6px;
+  }
+
+  .visual-page h2 {
+    margin: 0 0 32px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #14213D;
+    border-bottom: 2px solid #14213D;
+    padding-bottom: 14px;
+  }
+
+  .visual-page .img-frame {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #E3E1E8;
+    border-radius: 6px;
+    background: #FAFAFB;
+    padding: 20px;
+  }
+
+  .visual-page img {
+    max-width: 100%;
+    max-height: 60vh;
+    object-fit: contain;
+    display: block;
+  }
+
+  @media (max-width: 420px) {
+    .pdf-page { padding: 28px 20px; }
+    .doc-body { flex-direction: column; }
+    .fields { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 
 <body>
 
   <!-- =========================
-       PAGE 1
+       PAGE 1 — STUDENT DETAILS FORM
        ========================= -->
-
   <div class="pdf-page">
 
-    <div class="card-wrap">
+    <div class="doc-header">
+      <div>
+        <div class="eyebrow">Student Record</div>
+        <h1>Student Details</h1>
+      </div>
+      <div class="doc-id">
+        Record No. {{ registerNumber }}
+      </div>
+    </div>
 
-      <div class="card">
+    <div class="doc-main">
+    <div class="doc-body">
 
-        <!-- PHOTO -->
-
-        <div class="photo">
-
+      <div class="photo-block">
+        <div class="photo-frame">
           <img
             src="{{ profileImage }}"
             alt="{{ name }}"
-            onerror="
-              this.style.display='none';
-              this.nextElementSibling.style.display='flex';
-            "
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
           >
-
           <div class="photo-fallback">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-            >
-
-              <circle
-                cx="12"
-                cy="8"
-                r="4"
-              />
-
-              <path
-  d="M20 5.5c-2.5-1-5-1-7 0v13c2-1 4.5-1 7 0v-13Z"
-  stroke-linejoin="round"
-/>
-
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M20 5.5c-2.5-1-5-1-7 0v13c2-1 4.5-1 7 0v-13Z" stroke-linejoin="round" />
             </svg>
-
           </div>
+        </div>
+        <div class="photo-caption">Photograph</div>
+      </div>
 
-          <div class="id-pill">
+      <div class="fields">
 
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-
-              <path
-                d="M12 3 2 8l10 5 10-5-10-5Z"
-                stroke-linejoin="round"
-              />
-
-            </svg>
-
-            Student ID
-
-          </div>
-
-          <div class="photo-fade"></div>
-
+        <div class="field full">
+          <div class="field-label">Full Name</div>
+          <div class="field-value">{{ name }}</div>
         </div>
 
-        <!-- INFO -->
-
-        <div class="info">
-
-          <h1>
-            {{ name }}
-          </h1>
-
-          <div class="info-row">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-
-              <rect
-                x="3.5"
-                y="5"
-                width="17"
-                height="14"
-                rx="2.4"
-              />
-
-              <path
-                d="M7 9.5h4M7 13h7"
-                stroke-linecap="round"
-              />
-
-            </svg>
-
-            <span>
-              {{ registerNumber }}
-            </span>
-
-          </div>
-
-          <div class="info-row">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-
-              <path
-                d="M4 5.5c2.5-1 5-1 7 0v13c-2-1-4.5-1-7 0v-13Z"
-                stroke-linejoin="round"
-              />
-
-              <path
-                d="M20 5.5c-2.5-1-5-1-7 0v13c2  -1 4.5-1 7 0v-13Z"
-                stroke-linejoin="round"
-              />
-
-            </svg>
-
-            <span>
-              {{ course }}
-            </span>
-
-          </div>
-
+        <div class="field">
+          <div class="field-label">Register Number</div>
+          <div class="field-value">{{ registerNumber }}</div>
         </div>
 
-        <!-- STATS -->
-
-        <div class="stats">
-
-          <div class="stat">
-
-            <div class="stat-value">
-              {{ semester }}
-            </div>
-
-            <div class="stat-label">
-              Semester
-            </div>
-
-          </div>
-
-          <div class="stat">
-
-            <div class="stat-value verified-value">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.4"
-              >
-
-                <path
-                  d="M5 12.5 9.5 17 19 7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-
-              </svg>
-
-              Verified
-
-            </div>
-
-            <div class="stat-label">
-              Status
-            </div>
-
-          </div>
-
+        <div class="field">
+          <div class="field-label">Course</div>
+          <div class="field-value">{{ course }}</div>
         </div>
 
-        <!-- FOOTER -->
-
-        <div class="menu">
-
-          <div class="menu-row">
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.7"
-            >
-
-              <circle
-                cx="12"
-                cy="12"
-                r="9"
-              />
-
-              <path
-                d="M8.5 12.5 11 15l4.5-6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-
-            </svg>
-
-            Official Academic Record
-
-            <span class="badge">
-              ✓ Verified
-            </span>
-
-          </div>
-
+        <div class="field">
+          <div class="field-label">Semester</div>
+          <div class="field-value">{{ semester }}</div>
         </div>
 
       </div>
 
     </div>
+    </div>
+
+   
 
   </div>
 
@@ -752,73 +306,49 @@
   <!-- =========================
        PAGE 2
        ========================= -->
-
   <div class="pdf-page visual-page">
-
-    <h1>
-      Academic Performance
-    </h1>
-
-    <img
-      src="{{ image2 }}"
-      alt="Academic Performance"
-    >
-
+    <div class="page-eyebrow">Section 02</div>
+    <h2>Academic Performance</h2>
+    <div class="img-frame">
+      <img src="{{ image2 }}" alt="Academic Performance">
+    </div>
   </div>
 
 
   <!-- =========================
        PAGE 3
        ========================= -->
-
   <div class="pdf-page visual-page">
-
-    <h1>
-      Student Activities
-    </h1>
-
-    <img
-      src="{{ image3 }}"
-      alt="Student Activities"
-    >
-
+    <div class="page-eyebrow">Section 03</div>
+    <h2>Student Activities</h2>
+    <div class="img-frame">
+      <img src="{{ image3 }}" alt="Student Activities">
+    </div>
   </div>
 
 
   <!-- =========================
        PAGE 4
        ========================= -->
-
   <div class="pdf-page visual-page">
-
-    <h1>
-      Campus Activities
-    </h1>
-
-    <img
-      src="{{ image4 }}"
-      alt="Campus Activities"
-    >
-
+    <div class="page-eyebrow">Section 04</div>
+    <h2>Campus Activities</h2>
+    <div class="img-frame">
+      <img src="{{ image4 }}" alt="Campus Activities">
+    </div>
   </div>
 
 
   <!-- =========================
        PAGE 5
        ========================= -->
-
   <div class="pdf-page visual-page">
-
-    <h1>
-      Graduation
-    </h1>
-
-    <img
-      src="{{ image5 }}"
-      alt="Graduation"
-    >
-<!--
-<button id="invalid-button"> -->
+    <div class="page-eyebrow">Section 05</div>
+    <h2>Graduation</h2>
+    <div class="img-frame">
+      <img src="{{ image5 }}" alt="Graduation">
+    </div>
+  </div>
 
 </body>
 </html>

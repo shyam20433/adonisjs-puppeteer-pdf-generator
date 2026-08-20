@@ -27,6 +27,8 @@ export default class PuppeteerLabService {
       case 'launch':
         return repository.testLaunch()
 
+
+
       case 'invalid-click':
         return repository.testInvalidClick(
           form
@@ -36,7 +38,8 @@ export default class PuppeteerLabService {
         return repository.testViewport(
           form
         )
-
+      case 'permissions':
+        return repository.testPermissions()
       case 'selector':
         return repository.testSelector(
           form
@@ -46,6 +49,8 @@ export default class PuppeteerLabService {
         return repository.testEvaluate(
           form
         )
+      case 'connect':
+      return repository.testConnect()
 
       case 'networkidle':
         return repository.testNetworkIdle(
@@ -74,6 +79,18 @@ export default class PuppeteerLabService {
     }
   }
 
+  public async testWaitUntil(
+    waitUntil:
+      'load' |
+      'networkidle0' |
+      'networkidle2'
+  ): Promise<object> {
+
+    return repository.testWaitUntil(
+      waitUntil
+    )
+  }
+
   public async generateScreenshot(
     form: StudentForm
   ): Promise<Buffer> {
@@ -92,6 +109,14 @@ export default class PuppeteerLabService {
     )
   }
 
+    public async generateabortPdf(
+    form: StudentForm
+  ): Promise<Buffer> {
+
+    return repository.testAbortImages(
+      form
+    )
+  }
   public async generatePdfOptions(
     form: StudentForm
   ): Promise<Buffer> {
