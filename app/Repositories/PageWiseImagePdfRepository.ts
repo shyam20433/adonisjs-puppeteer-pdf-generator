@@ -1,21 +1,6 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 
-type ChartConfig = {
-  type: 'pie' | 'bar'
-
-  data: {
-    label: string
-    value: number
-  }[]
-}
-
-type PageConfig = {
-  page: number
-  imageCount: number
-  chart?: ChartConfig[]
-}
-
 export default class PageWiseImagePdfRepository {
 
   private imageDirectory =
